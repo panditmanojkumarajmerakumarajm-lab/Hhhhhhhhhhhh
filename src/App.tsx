@@ -20,7 +20,10 @@ import {
   ChevronRight, 
   RefreshCw,
   Send,
-  Download
+  Download,
+  Youtube,
+  ExternalLink,
+  MessageCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -44,22 +47,26 @@ interface SupportQuery {
 
 export default function App() {
   // Navigation State
-  const [activeTab, setActiveTab] = useState<"policy" | "terms" | "signer" | "contact">("policy");
+  const [activeTab, setActiveTab] = useState<"policy" | "terms" | "signer" | "contact" | "deal">("deal");
   const [searchQuery, setSearchQuery] = useState("");
   
   // Interaction Feedbacks
   const [copiedText, setCopiedText] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedUpi, setCopiedUpi] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   // Digital Signer State
   const [buyerName, setBuyerName] = useState("");
   const [sellerName, setSellerName] = useState("Gautam Tiwari");
-  const [channelName, setChannelName] = useState("");
-  const [dealAmount, setDealAmount] = useState("");
+  const [channelName, setChannelName] = useState("Official Sur Sargam");
+  const [dealAmount, setDealAmount] = useState("7999");
   const [isSigned, setIsSigned] = useState(false);
   const [contractDate, setContractDate] = useState("2026-06-27");
   const [buyerSignatureData, setBuyerSignatureData] = useState<string | null>(null);
+  
+  // Dynamic payment amount
+  const [payAmount, setPayAmount] = useState("7999");
   
   // Canvas Ref & Drawing State
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -495,6 +502,22 @@ export default function App() {
               </h3>
               <nav className="space-y-1">
                 <button
+                  id="tab-deal"
+                  onClick={() => { setActiveTab("deal"); setSearchQuery(""); }}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                    activeTab === "deal"
+                      ? "bg-amber-50 text-amber-900 border-l-4 border-amber-500 pl-4"
+                      : "text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Youtube className="w-4 h-4 text-red-600" />
+                    🔥 एक्टिव चैनल डील & पेमेंट
+                  </span>
+                  <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                </button>
+
+                <button
                   id="tab-policy"
                   onClick={() => { setActiveTab("policy"); setSearchQuery(""); }}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
@@ -602,6 +625,219 @@ export default function App() {
 
             <AnimatePresence mode="wait">
               
+              {/* TAB 0: ACTIVE YOUTUBE DEAL & PAYMENT */}
+              {activeTab === "deal" && !searchQuery && (
+                <motion.div
+                  key="channel-deal-tab"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-6"
+                >
+                  {/* Top Notification Banner */}
+                  <div className="bg-gradient-to-r from-red-500 to-amber-600 text-white p-4 rounded-2xl shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-white/20 p-2 rounded-xl">
+                        <Youtube className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-hindi text-lg font-bold leading-tight">धमाकेदार लाइव ऑफर: 'Official Sur Sargam' चैनल बिकाऊ है!</h4>
+                        <p className="text-white/90 text-xs font-hindi">चैनल खरीदे, एग्रीमेंट साइन करें और सुरक्षित रूप से सुरक्षित पेमेंट पूरा करें।</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="bg-white/20 text-white text-[11px] font-bold px-2.5 py-1 rounded-full uppercase animate-pulse">
+                        33% OFF
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    {/* Left Column: Channel Details & Specs */}
+                    <div className="md:col-span-6 space-y-6">
+                      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide border-b border-slate-100 pb-3 mb-4 flex items-center justify-between">
+                          <span>1. चैनल की जानकारी (Channel Info)</span>
+                          <span className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-mono uppercase font-bold">Verified Deal</span>
+                        </h3>
+
+                        {/* Interactive Channel Card */}
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col gap-4">
+                          <div className="flex items-center gap-4">
+                            <div className="relative">
+                              <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-600 border-2 border-red-200">
+                                <Youtube className="w-9 h-9" />
+                              </div>
+                              <span className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></span>
+                            </div>
+                            <div>
+                              <h4 className="font-hindi text-lg font-bold text-slate-900 leading-tight">
+                                Official Sur Sargam
+                              </h4>
+                              <p className="text-slate-500 text-xs font-mono">@officialsursargam</p>
+                              <a 
+                                href="https://youtube.com/@officialsursargam?si=pWpthtkpGCCXd0y3" 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                referrerPolicy="no-referrer"
+                                className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700 font-bold mt-1 group"
+                              >
+                                <span>चैनल लिंक खोलें (Open Channel)</span>
+                                <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                              </a>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-200/60">
+                            <div className="bg-white p-3 rounded-lg border border-slate-100">
+                              <p className="text-[10px] text-slate-400 font-hindi">चैनल की कीमत (Price)</p>
+                              <p className="text-lg font-extrabold text-slate-900">₹7,999</p>
+                              <p className="text-[9px] text-slate-400 line-through">₹12,000</p>
+                            </div>
+                            <div className="bg-white p-3 rounded-lg border border-slate-100">
+                              <p className="text-[10px] text-slate-400 font-hindi">कैटेगरी (Category)</p>
+                              <p className="text-xs font-bold text-slate-800 mt-1 font-hindi">संगीत और मनोरंजन (Sursargam Music)</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Fast Sign Button */}
+                        <div className="mt-5 space-y-2">
+                          <p className="text-xs text-slate-500 font-hindi">
+                            क्या आप इस चैनल के लिए एग्रीमेंट साइन करना चाहते हैं? नीचे बटन दबाएं जिससे डिटेल्स पहले से भर जाएंगी:
+                          </p>
+                          <button
+                            onClick={() => {
+                              setChannelName("Official Sur Sargam");
+                              setDealAmount("7999");
+                              setActiveTab("signer");
+                              // Scroll up to have a smooth transition
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }}
+                            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white font-hindi text-sm font-semibold rounded-xl shadow-xs transition-colors cursor-pointer"
+                          >
+                            <span>इस डील का एग्रीमेंट साइन करें ✍️</span>
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Important Warning Alert based on User's Clause Addition */}
+                      <div className="bg-amber-50/70 border border-amber-200 p-5 rounded-2xl space-y-2">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+                          <h4 className="font-hindi text-sm font-bold text-amber-900">सुरक्षा नियम और रिफंड नीति</h4>
+                        </div>
+                        <p className="text-xs text-amber-800 leading-relaxed font-hindi">
+                          <strong>महत्वपूर्ण सुरक्षा नियम:</strong> यदि आपके द्वारा आधा भुगतान करने के बाद चैनल में लॉगिन कर लिया जाता है लेकिन चैनल पसंद नहीं आता, तो विक्रेता को भुगतान राशि वापस करनी होगी और उसके बाद ही चैनल का स्वामित्व वापस मिलेगा। यदि विक्रेता 7 दिनों के भीतर ऐसा नहीं करता है, तो खरीदार को चैनल आगे बेचने का अधिकार सुरक्षित रहेगा।
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Payments, UPI QR, and Support contact */}
+                    <div className="md:col-span-6 space-y-6">
+                      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide border-b border-slate-100 pb-3 mb-4 flex items-center gap-2">
+                          <Lock className="w-4 h-4 text-emerald-600" />
+                          <span>2. सुरक्षित भुगतान (Secure UPI Payment)</span>
+                        </h3>
+
+                        {/* UPI Copy Box */}
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-slate-500 mb-1 font-hindi">
+                              आधिकारिक UPI ID (Gautam Tiwari)
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <div className="flex-1 px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-mono text-xs font-bold break-all select-all">
+                                8955932061@axl
+                              </div>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText("8955932061@axl");
+                                  setCopiedUpi(true);
+                                  setTimeout(() => setCopiedUpi(false), 2000);
+                                }}
+                                className="px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition-all text-xs font-semibold shrink-0 flex items-center gap-1.5 cursor-pointer"
+                              >
+                                {copiedUpi ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                                <span className="font-hindi">{copiedUpi ? "कॉपी हो गया!" : "कॉपी"}</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Dynamic Custom QR Generator */}
+                          <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center justify-center text-center">
+                            <p className="text-xs text-slate-500 font-hindi mb-3">
+                              भुगतान के लिए नीचे दिए गए क्यूआर कोड (QR Code) को स्कैन करें:
+                            </p>
+
+                            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs relative">
+                              {/* Standard QR Code API calling */}
+                              <img 
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`upi://pay?pa=8955932061@axl&pn=Gautam%20Tiwari&am=${payAmount}&cu=INR&tn=Official%20Sur%20Sargam`)}`}
+                                alt="UPI QR Code"
+                                className="w-40 h-40 object-contain"
+                                referrerPolicy="no-referrer"
+                              />
+                            </div>
+
+                            {/* Pay Amount input box for customization or bargain */}
+                            <div className="mt-4 w-full">
+                              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1 font-hindi">
+                                यदि आपने कीमत कम/ज्यादा करवाई है, तो यहाँ बदलें (Customize Amount):
+                              </label>
+                              <div className="relative max-w-xs mx-auto">
+                                <span className="absolute left-3 top-2 text-sm font-bold text-slate-400">₹</span>
+                                <input 
+                                  type="number"
+                                  value={payAmount}
+                                  onChange={(e) => setPayAmount(e.target.value)}
+                                  placeholder="7999"
+                                  className="w-full pl-7 pr-3 py-1.5 text-center font-bold rounded-lg border border-slate-200 bg-white text-slate-900 text-sm focus:ring-1 focus:ring-amber-500"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Mobile Quick Pay Protocol button */}
+                            <a
+                              href={`upi://pay?pa=8955932061@axl&pn=Gautam%20Tiwari&am=${payAmount}&cu=INR&tn=Official%20Sur%20Sargam`}
+                              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition-all font-hindi"
+                            >
+                              <span>सीधे मोबाइल ऐप से भुगतान करें</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          </div>
+
+                          {/* Negotiate Note */}
+                          <div className="text-center bg-amber-50 border border-amber-100 p-3.5 rounded-xl">
+                            <p className="text-xs text-amber-900 leading-normal font-hindi">
+                              📢 <strong>नोट:</strong> अभी जो मैंने YouTube channel दिया है उसकी वास्तविक रेट <strong>₹7999</strong> है। यदि आपको पेमेंट कम या ज्यादा करवाना है, तो नीचे दिए गए WhatsApp नंबर पर संपर्क कर बात करें!
+                            </p>
+                          </div>
+
+                          {/* Quick WhatsApp Support Action */}
+                          <div className="pt-2">
+                            <a 
+                              href="https://wa.me/918502054124?text=Hi%20Gautam,%20I%20am%20interested%20in%20buying%20the%20Official%20Sur%20Sargam%20channel.%20Let's%20discuss%20the%20deal%20price."
+                              target="_blank"
+                              rel="noreferrer"
+                              referrerPolicy="no-referrer"
+                              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-emerald-500 hover:bg-emerald-600 text-white font-hindi text-sm font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
+                            >
+                              {/* Custom high-quality WhatsApp SVG or standard indicator */}
+                              <span className="text-lg">💬</span>
+                              <span>पेमेंट कम/ज्यादा के लिए WhatsApp पर चैट करें</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               {/* TAB 1: PRIVACY POLICY */}
               {(activeTab === "policy" || searchQuery) && (
                 <motion.div
@@ -1211,6 +1447,28 @@ export default function App() {
           </p>
         </div>
       </footer>
+
+      {/* Floating WhatsApp Support Logo Widget */}
+      <div className="fixed bottom-6 right-6 z-50 no-print">
+        <a 
+          href="https://wa.me/918502054124?text=Hi%20Gautam,%20I%20am%20visiting%20your%20deals%20website%20and%20want%20to%20discuss%20the%20YouTube%20channel%20deal."
+          target="_blank" 
+          rel="noreferrer" 
+          referrerPolicy="no-referrer"
+          className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 duration-200 group"
+          title="Contact on WhatsApp: 8502054124"
+        >
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+          </span>
+          <MessageCircle className="w-5 h-5 text-white" />
+          <div className="flex flex-col text-left">
+            <span className="text-[10px] font-bold tracking-wide uppercase leading-none opacity-90">WhatsApp Support</span>
+            <span className="text-xs font-mono font-bold leading-tight">8502054124</span>
+          </div>
+        </a>
+      </div>
     </div>
   );
 }
